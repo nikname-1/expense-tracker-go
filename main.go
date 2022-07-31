@@ -37,6 +37,17 @@ func getBudgets(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, budgets)
 }
 
+func addBudget(c *gin.Context) {
+	var newBudget budget
+
+	if err := c.BindJSON(&newBudget); err != nil {
+		return
+	}
+
+	budgets[newBudget.Category] = newBudget
+	c.IndentedJSON(http.StatusCreated, newBudget)
+}
+
 func addExpense(c *gin.Context) {
 	id, ok := c.GetQuery("id")
 
@@ -79,6 +90,7 @@ func main() {
 	router := gin.Default()
 	router.GET("/expenses", getExpenses)
 	router.GET("/budgets", getBudgets)
+	router.POST("budgets", addBudget)
 	router.POST("/expenses", addExpense)
 	router.PATCH("/expenses", editExpense)
 	router.Run("localhost:8080")
