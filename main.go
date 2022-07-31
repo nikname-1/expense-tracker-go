@@ -57,6 +57,21 @@ func addExpense(c *gin.Context) {
 }
 
 func editExpense(c *gin.Context) {
+	id, ok := c.GetQuery("id")
+
+	if !ok {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Missing id query parameter."})
+	}
+
+	if _, ok := expenses[id]; !ok {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Expense ID does not exist"})
+	}
+	var updatedExpense expense
+	if err := c.BindJSON(&updatedExpense); err != nil {
+		return
+	}
+	expenses[id] = updatedExpense
+	c.IndentedJSON(http.StatusOK, updatedExpense)
 
 }
 
@@ -65,7 +80,7 @@ func main() {
 	router.GET("/expenses", getExpenses)
 	router.GET("/budgets", getBudgets)
 	router.POST("/expenses", addExpense)
-	// router.PATCH()
+	router.PATCH("/expenses", editExpense)
 	router.Run("localhost:8080")
 
 }
