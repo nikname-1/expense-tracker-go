@@ -37,10 +37,35 @@ func getBudgets(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, budgets)
 }
 
+func addExpense(c *gin.Context) {
+	id, ok := c.GetQuery("id")
+
+	if !ok {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Missing id query parameter."})
+	}
+
+	if _, ok := expenses[id]; ok {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Cannot add expense this id already exists"})
+	}
+
+	var newExpense expense
+	if err := c.BindJSON(&newExpense); err != nil {
+		return
+	}
+	expenses[id] = newExpense
+	c.IndentedJSON(http.StatusCreated, newExpense)
+}
+
+func editExpense(c *gin.Context) {
+
+}
+
 func main() {
 	router := gin.Default()
 	router.GET("/expenses", getExpenses)
 	router.GET("/budgets", getBudgets)
+	router.POST("/expenses", addExpense)
+	// router.PATCH()
 	router.Run("localhost:8080")
 
 }

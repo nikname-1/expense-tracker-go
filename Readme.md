@@ -5,3 +5,10 @@ Application implements a simple weekly/monthly expense tracker. User can add bud
 
 
 Runs on localhost:8080 and allows very basic interactions GET, POST, PATCH requests.
+
+```
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data @exp1.json \
+  http://localhost:8080/expenses?id=3
+```
