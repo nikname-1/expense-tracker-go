@@ -1,4 +1,4 @@
-## A simple implementation of a expense tracker API in GO.
+## A simple implementation of a expense tracker API in GO. Example Project.
 ---
 
 Application implements a simple weekly/monthly expense tracker. User can add budgets and expenses, as well as see remaining budget by category.  
